@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dice Game</title>
+  </head>
+  <body>
+    <script type="text/javascript">
+      function roll(id) {
+        // place bets
+        // console.log({id});
+
+        const ele = document.getElementById(id);
+
+        if (ele.innerHTML.trim() === 0) ele.innerHTML = 1;
+        else {
+          let count = ele.innerHTML;
+          count++;
+          ele.innerHTML = count;
+        }
+      }
+      function render() {}
+      function calculateTotal() {
+        // calculate win or loss
+
+        let betAmt = 0;
+        const dice = Math.floor(Math.random() * 6) + 1;
+        console.log("dice : " + dice);
+        dicediv.innerHTML = "Dice Won : " + dice;
+        betAmt += Number(document.getElementById("1btn").innerHTML);
+        betAmt += Number(document.getElementById("2btn").innerHTML);
+        betAmt += Number(document.getElementById("3btn").innerHTML);
+        betAmt += Number(document.getElementById("4btn").innerHTML);
+        betAmt += Number(document.getElementById("5btn").innerHTML);
+        betAmt += Number(document.getElementById("6btn").innerHTML);
+        const tempid = dice + "btn";
+        // console.log('tempid '+ tempid);
+        const temp = document.getElementById(tempid);
+        // console.log({temp});
+        const tempval = temp.innerHTML;
+        console.log(tempval);
+        console.log("bet amt" + betAmt);
+        let winamt = 0;
+        showbetdiv.innerHTML = "Bets placed : $" + betAmt;
+        if (tempval === 0) winamt = -betAmt;
+        else winamt = tempval * 2 - betAmt;
+
+        return winamt;
+      }
+      function disablebtn(flag) {
+        // enable or disable betting
+        const ele1 = document.getElementById("1btn");
+        const ele2 = document.getElementById("2btn");
+        const ele3 = document.getElementById("3btn");
+        const ele4 = document.getElementById("4btn");
+        const ele5 = document.getElementById("5btn");
+        const ele6 = document.getElementById("6btn");
+        ele1.disabled = flag;
+        ele2.disabled = flag;
+        ele3.disabled = flag;
+        ele4.disabled = flag;
+        ele5.disabled = flag;
+        ele6.disabled = flag;
+      }
+      function refresh() {
+        // reset betting values to 0
+        const ele1 = document.getElementById("1btn");
+        const ele2 = document.getElementById("2btn");
+        const ele3 = document.getElementById("3btn");
+        const ele4 = document.getElementById("4btn");
+        const ele5 = document.getElementById("5btn");
+        const ele6 = document.getElementById("6btn");
+        ele1.innerHTML = 0;
+        ele2.innerHTML = 0;
+        ele3.innerHTML = 0;
+        ele4.innerHTML = 0;
+        ele5.innerHTML = 0;
+        ele6.innerHTML = 0;
+        disablebtn(false);
+      }
+      const delay = (ms) => new Promise((res) => setTimeout(res, ms)); // used to delay time
+      const delayTime = async () => {
+        await delay(10000);
+        disablebtn(true);
+
+        await delay(2000);
+        console.log("2 sec passed ");
+        const winamt = calculateTotal();
+
+        await delay(5000);
+        console.log("5 sec passed ");
+        showResult(winamt);
+        refresh();
+      };
+
+      function timer() {
+        betdiv.style.display = "block";
+        windiv.innerHTML = "";
+        dicediv.innerHTML = "";
+        showbetdiv.innerHTML = "";
+        refresh(false);
+        let timeleft = 10;
+        let downloadTimer = setInterval(() => {
+          // timer countdown to 1 sec
+          if (timeleft <= 0) {
+            timerdiv.innerHTML = "";
+            clearInterval(downloadTimer);
+            // delayTime()
+          } else {
+            timerdiv.innerHTML = timeleft + " seconds remaining";
+          }
+          timeleft -= 1;
+        }, 1000);
+      }
+      function play() {
+        timer();
+        // betdiv.style.display = 'block'
+        delayTime();
+      }
+    </script>
+
+    <div>
+      <button id="playbtn" name="testname" onclick="play()">play</button>
+
+      <div>
+        <label>Balance : $<label id="bal" name="bal">100</label></label>
+      </div>
+      <div id="countdown"></div>
+      <script>
+        const timerdiv = document.getElementById("countdown");
+      </script>
+      <div id="bets"></div>
+      <div id="dice"></div>
+      <hello-world></hello-world>
+      <div id="windiv"></div>
+
+      <hr />
+      <hr />
+      <hr />
+      <script>
+        const windiv = document.getElementById("windiv");
+        const dicediv = document.getElementById("dice");
+        const showbetdiv = document.getElementById("bets");
+        function showResult(winamt) {
+          betdiv.style.display = "none";
+          console.log("show res " + winamt);
+          if (winamt >= 0) {
+            windiv.innerHTML = "You won $" + winamt;
+            console.log("You won $" + winamt + " :) ");
+          } else {
+            windiv.innerHTML = "You lost $" + Math.abs(winamt);
+            console.log("You lost $" + -winamt + " :( ");
+          }
+          const ele = document.getElementById("bal");
+          const result = Number(ele.innerHTML) + winamt;
+          console.log("Balance : $" + result);
+          ele.innerHTML = result;
+        }
+      </script>
+      <div id="betdiv">
+        <div>Dice 1</div>
+        <label
+          >Bet : $
+          <button value="0" onclick="roll(this.id)" id="1btn">0</button>
+        </label>
+        <hr />
+        <div>Dice 2</div>
+        <label>Bet : $</label>
+        <button value="0" onclick="roll(this.id)" id="2btn">0</button>
+        <hello-world />
+        <hr />
+        <div>Dice 3</div>
+        <label>Bet : $</label>
+        <button value="0" onclick="roll(this.id)" id="3btn">0</button>
+        <hr />
+        <div>Dice 4</div>
+        <label>Bet : $</label>
+        <button value="0" onclick="roll(this.id)" id="4btn">0</button>
+        <hr />
+        <div>Dice 5</div>
+        <label>Bet : $</label>
+        <button value="0" onclick="roll(this.id)" id="5btn">0</button>
+        <hr />
+        <div>Dice 6</div>
+        <label>Bet : $</label>
+        <button value="0" onclick="roll(this.id)" id="6btn">0</button>
+        <hr />
+      </div>
+    </div>
+    <script>
+      class HelloWorld extends HTMLElement {
+        constructor() {
+          super();
+          this.innerHTML = "Hello world";
+        }
+      }
+      customElements.define("hello-world", HelloWorld);
+      const betdiv = document.getElementById("betdiv");
+      betdiv.style.display = "none";
+    </script>
+  </body>
+</html>
